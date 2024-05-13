@@ -1,5 +1,7 @@
 <x-app-layout>
 
+  test
+
   <!-- Print Job -->
   <div
     class="mt-5 my-20 mx-20 flex flex-col bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]">
