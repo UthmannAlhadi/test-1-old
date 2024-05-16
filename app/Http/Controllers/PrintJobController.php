@@ -13,7 +13,6 @@ class PrintJobController extends Controller
 
     public function displayExplain()
     {
-        phpinfo();
         return view('user.print-explain');
     }
 

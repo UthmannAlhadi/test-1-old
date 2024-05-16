@@ -12,11 +12,10 @@
           <!-- Title -->
           <h1
             class="text-3xl text-gray-800 font-bold md:text-4xl md:leading-tight lg:text-5xl lg:leading-tight dark:text-gray-200">
-            Solving problems for every <span class="text-blue-600 dark:text-blue-500">team</span>
+            Smart Printing System <span class="text-blue-600 dark:text-blue-500 lg:text-4xl">Solutions</span>
           </h1>
           <p class="mt-3 text-base text-gray-500">
-            Built on standard web technology, teams use Preline to build beautiful cross-platform hybrid apps in a
-            fraction of the time.
+            Built to help users ease their printing journey without the need for any manual process.
           </p>
           <!-- End Title -->
 
