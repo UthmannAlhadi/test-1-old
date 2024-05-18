@@ -48,7 +48,8 @@ class TrainingController extends Controller
             $uploadedFile = $request->file('photo');
             $originalExtension = $uploadedFile->getClientOriginalExtension();
             $filename = 'training_' . $userId . '_' . time();
-            $imageFilename = $filename . '.jpg';
+            $pdfFilename = $filename . '.pdf';
+            $tempPath = storage_path('app/temp');
 
             // Ensure the directory exists
             $path = public_path('images/trainings');
@@ -56,14 +57,18 @@ class TrainingController extends Controller
                 File::makeDirectory($path, 0777, true, true);
             }
 
+            // Clear temporary directory before conversion
+            $tempPath = storage_path('app/temp');
+            File::cleanDirectory($tempPath);
+
             if (in_array($originalExtension, ['doc', 'docx'])) {
                 // Convert Word document to PDF using LibreOffice
-                $tempDir = storage_path('app/temp');
-                $command = "\"C:\\Program Files\\LibreOffice\\program\\soffice\" --headless --convert-to pdf --outdir " . escapeshellarg($tempDir) . " " . escapeshellarg($uploadedFile->getRealPath());
+                $command = "\"C:\\Program Files\\LibreOffice\\program\\soffice\" --headless --convert-to pdf --outdir " . escapeshellarg($tempPath) . " " . escapeshellarg($uploadedFile->getRealPath());
                 \Log::info("Executing command: $command");
 
-                // List files before conversion
-                $beforeFiles = File::files($tempDir);
+                // List files in tempPath before conversion
+                $beforeFiles = scandir($tempPath);
+                \Log::info("Files before conversion: " . implode(", ", $beforeFiles));
 
                 $output = null;
                 $returnVar = null;
@@ -72,70 +77,81 @@ class TrainingController extends Controller
                 \Log::info("Command output: " . implode("\n", $output));
                 \Log::info("Command return status: $returnVar");
 
+                // List files in tempPath after conversion
+                $afterFiles = scandir($tempPath);
+                \Log::info("Files after conversion: " . implode(", ", $afterFiles));
+
                 if ($returnVar !== 0) {
                     \Log::error("Failed to convert Word document to PDF: " . implode("\n", $output));
                     return redirect()->back()->withErrors(['photo' => 'Failed to convert Word document to PDF.']);
                 }
 
-                // List files after conversion
-                $afterFiles = File::files($tempDir);
-
-                // Find the new file by comparing before and after files
+                // Find the newly generated PDF file by comparing the file lists before and after conversion
                 $newFiles = array_diff($afterFiles, $beforeFiles);
-                if (count($newFiles) !== 1) {
-                    \Log::error("Failed to determine the converted PDF file.");
-                    return redirect()->back()->withErrors(['photo' => 'Failed to determine the converted PDF file.']);
+                $pdfPath = null;
+                foreach ($newFiles as $file) {
+                    if (pathinfo($file, PATHINFO_EXTENSION) === 'pdf') {
+                        $pdfPath = $tempPath . '/' . $file;
+                        break;
+                    }
                 }
 
-                $pdfPath = reset($newFiles)->getRealPath();
-
-                // Verify the generated PDF
-                if (!File::exists($pdfPath)) {
-                    \Log::error("Generated PDF file does not exist: " . $pdfPath);
-                    return redirect()->back()->withErrors(['photo' => 'Generated PDF file does not exist.']);
+                if (!$pdfPath || !file_exists($pdfPath)) {
+                    \Log::error("Generated PDF file does not exist or is not readable: $pdfPath");
+                    return redirect()->back()->withErrors(['photo' => 'Generated PDF file does not exist or is not readable.']);
                 }
 
-                if (!is_readable($pdfPath)) {
-                    \Log::error("Generated PDF file is not readable: " . $pdfPath);
-                    return redirect()->back()->withErrors(['photo' => 'Generated PDF file is not readable.']);
-                }
+                // Log the existence of the PDF file
+                \Log::info("Generated PDF file exists: $pdfPath");
+            } elseif ($originalExtension === 'pdf') {
+                // Directly use the uploaded PDF
+                $pdfPath = $uploadedFile->getRealPath();
+                \Log::info("Using uploaded PDF: $pdfPath");
+            } else {
+                // If it's not a PDF or Word document, directly save the uploaded image
+                $imageFilename = $filename . '.' . $originalExtension;
+                $uploadedFile->move($path, $imageFilename);
+                $training->photo = $imageFilename;
+                $training->save();
+                session()->flash('message', 'Display document');
+                return redirect()->route('user.training-list');
+            }
 
-                // Convert the generated PDF to an image
+            // Convert the generated or uploaded PDF to images
+            try {
+                $pdf = new Pdf($pdfPath);
+            } catch (\Exception $e) {
+                \Log::error("Failed to initialize Pdf object: " . $e->getMessage());
+                return redirect()->back()->withErrors(['photo' => 'Failed to initialize Pdf object.']);
+            }
+
+            $pageCount = $pdf->getNumberOfPages();
+            \Log::info("Number of pages in PDF: $pageCount");
+            for ($page = 1; $page <= $pageCount; $page++) {
+                $imageFilename = $filename . '_page' . $page . '.jpg';
                 $imagePath = $path . '/' . $imageFilename;
 
                 try {
-                    $pdf = new Pdf($pdfPath);
-                    $pdf->saveImage($imagePath);
+                    $pdf->setPage($page)->saveImage($imagePath);
+                    \Log::info("Saved image for page $page: $imagePath");
                 } catch (\Exception $e) {
-                    \Log::error("Failed to convert PDF to image1: " . $e->getMessage());
-                    \Log::error("Exception trace: " . $e->getTraceAsString());
-                    return redirect()->back()->withErrors(['photo' => 'Failed to convert PDF to image1.']);
+                    \Log::error("Failed to convert PDF page $page to image: " . $e->getMessage());
+                    return redirect()->back()->withErrors(['photo' => "Failed to convert PDF page $page to image."]);
                 }
 
-                // Delete the temporary PDF file
-                unlink($pdfPath);
-            } elseif ($originalExtension === 'pdf') {
-                // Convert PDF to image directly
-                try {
-                    $pdf = new Pdf($uploadedFile->getRealPath());
-                    $pdf->saveImage($path . '/' . $imageFilename);
-                } catch (\Exception $e) {
-                    \Log::error("Failed to convert PDF to image2: " . $e->getMessage());
-                    \Log::error("Exception trace: " . $e->getTraceAsString());
-                    return redirect()->back()->withErrors(['photo' => 'Failed to convert PDF to image2.']);
-                }
-            } else {
-                // If it's not a PDF or Word document, directly save the uploaded image
-                $uploadedFile->move($path, $imageFilename);
+                // Save each page as a separate Training entry (or handle as needed)
+                $trainingPage = new Training();
+                $trainingPage->photo = $imageFilename;
+                $trainingPage->save();
             }
 
-            $training->photo = $imageFilename;
+            // Delete the temporary PDF file if it was converted from a Word document
+            if (in_array($originalExtension, ['doc', 'docx'])) {
+                unlink($pdfPath);
+            }
         }
 
-        $training->save();
-
         session()->flash('message', 'Display document');
-
         return redirect()->route('user.training-list');
 
 
