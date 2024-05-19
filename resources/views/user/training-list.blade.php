@@ -295,13 +295,26 @@
   </div>
 
 
-  <!-- Button -->
-  <a div class="flex justify-center" href="{{ route('user.print-preview') }}">
-    <button type="button"
-      class="py-3 px-4 inline-flex my-5 items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-blue-900 dark:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-      Next
-    </button>
-    </div>
+  <div class="flex justify-center px-6 py-4">
+    <a class="flex justify-center mr-4" href="{{ route('user.print-preview') }}">
+      <button type="button"
+        class="py-2 px-4 inline-flex my-5 items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-blue-900 dark:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+        Next
+      </button>
+    </a>
+    <form method="post" action="{{ route('user.delete-training') }}">
+      @csrf
+      <button type="submit"
+        class="py-2 px-4 inline-flex my-5 items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-blue-900 dark:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+        Cancel
+      </button>
+    </form>
+
+  </div>
+
+
+
+
 
 
 </x-app-layout>

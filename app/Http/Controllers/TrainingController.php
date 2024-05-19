@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Storage;
 // use Intervention\Image\ImageManagerStatic as Image;
 use Spatie\PdfToImage\Pdf;
 use Intervention\Image\Facades\Image;
-
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 
 class TrainingController extends Controller
@@ -143,6 +144,11 @@ class TrainingController extends Controller
                 $trainingPage = new Training();
                 $trainingPage->photo = $imageFilename;
                 $trainingPage->save();
+
+                // Store the training ID in the session for potential deletion
+                $uploadedTrainingIds = Session::get('uploaded_training_ids', []);
+                $uploadedTrainingIds[] = $trainingPage->id;
+                Session::put('uploaded_training_ids', $uploadedTrainingIds);
             }
 
             // Delete the temporary PDF file if it was converted from a Word document
@@ -243,7 +249,35 @@ class TrainingController extends Controller
         // return redirect()->route('user.training-list');
 
     }
+    public function deleteTraining(Request $request)
+    {
+        // Fetch the training IDs stored in the session
+        $trainingIds = Session::get('uploaded_training_ids', []);
+        Log::info("Deleting training IDs: " . implode(", ", $trainingIds));
 
+        foreach ($trainingIds as $trainingId) {
+            $training = Training::find($trainingId);
 
+            if ($training) {
+                // Ensure the filename pattern is retrieved correctly
+                $filenamePattern = $training->photo;
+                $directory = public_path('images/trainings');
+
+                // Delete the file
+                $file = $directory . '/' . $filenamePattern;
+                if (File::exists($file)) {
+                    File::delete($file);
+                }
+
+                // Delete the record from the database
+                $training->delete();
+            }
+        }
+
+        // Clear the session data related to the upload
+        Session::forget('uploaded_training_ids');
+
+        return redirect()->route('user.training-form')->with('message', 'All uploaded files and data have been deleted.');
+    }
 
 }
