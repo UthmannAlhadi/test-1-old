@@ -66,225 +66,233 @@
   <!-- Chevrons Breadcrumbs End -->
 
   <!-- Display File -->
-  <div class="py-6 grid grid-cols-2 gap-1">
-    <!-- Content Left Side -->
-    <div class="max-w-2xl sm:px-6 lg:px-8 ">
-      <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-      </div>
-      <div class="bg-white border rounded shadow p-4">
-        <div class="p-2">
-          <!-- Body content goes here -->
-          @if (Session::has('message'))
-            <div class="bg-green-500 text-white px-4 py-2 rounded">
-              <!-- Alert content goes here -->
-              {{ Session::get('message') }}
-            </div>
-          @endif
-          <div class="flex flex-col">
-            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8 w-full h-full">
-              <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                <div class="overflow-hidden">
-                  <table class="min-w-full text-left text-sm font-light">
-                    <thead class="border-b font-medium dark:border-neutral-500">
-                      <tr>
-                        <th scope="col" class="px-6 py-4">File</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @php($i = 0)
-                      @foreach ($trainings as $training)
-                        <tr
-                          class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
-                          <td class="whitespace-nowrap px-6 py-4">
-                            @if ($training->photo)
-                              <img src="{{ asset('images/trainings/' . $training->photo) }}" alt="">
-                            @else
-                              <img src="{{ asset('images/trainings/default.jpg') }}" alt="">
-                            @endif
-                          </td>
+  <div class="container mx-auto  bg-slate-500 ">
+    <div class="py-4 grid grid-cols-2 gap-1">
+      <!-- Content Left Side -->
+      <div class="max-w-xl sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        </div>
+        <div class="bg-white border rounded shadow p-4">
+          <div class="p-2">
+            <!-- Body content goes here -->
+            @if (Session::has('message'))
+              <div class="bg-green-500 text-white px-4 py-2 rounded">
+                <!-- Alert content goes here -->
+                {{ Session::get('message') }}
+              </div>
+            @endif
+            <div class="flex flex-col">
+              <div class="overflow-x-auto sm:-mx-6 lg:-mx-8 w-full h-full">
+                <div class="inline-block min-w-full py-0 sm:px-6 lg:px-8">
+                  <div class="overflow-hidden">
+                    <table class="min-w-full text-left text-sm font-light">
+                      <thead class="border-b font-medium dark:border-neutral-500">
+                        <tr>
+                          <th scope="col" class="px-6 py-4">File</th>
                         </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        @php($i = 0)
+                        @foreach ($trainings as $training)
+                          <tr
+                            class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
+                            <td class="whitespace-nowrap px-6 py-4">
+                              @if ($training->photo)
+                                <img src="{{ asset('images/trainings/' . $training->photo) }}" alt="">
+                              @else
+                                <img src="{{ asset('images/trainings/default.jpg') }}" alt="">
+                              @endif
+                            </td>
+                          </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Content Right Side -->
-    <div class="max-w-2xl sm:px-6 lg:px-8 ">
-      <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-      </div>
-      <div class="bg-white border rounded shadow p-4">
-        <div class="p-2">
-          <!-- Body content goes here -->
-          @if (Session::has('message'))
-            <div class="bg-green-500 text-white px-4 py-2 rounded">
-              <!-- Alert content goes here -->
-              {{ Session::get('message') }}
-            </div>
-          @endif
-          <div class="flex flex-col">
-            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8 w-full">
-              <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                <div class="overflow-hidden">
-                  <table class="min-w-full text-left text-sm font-light">
-                    <thead class="border-b font-medium dark:border-neutral-500">
-                      <tr>
-                        <th scope="col" class="px-6 py-4">Set Preference</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr> <!-- Color -->
-                        <td>
-                          <!-- Printing Color -->
-                          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt class="text-sm font-medium leading-6 text-gray-900">Printing Color</dt>
-                        </td>
-                        <td>
-                          <!-- radio button -->
-                          <div class = "grid w-full place-items-center">
-                            <div class="grid w-60 grid-cols-2 gap-2 rounded-xl bg-gray-200 p-2">
-                              <div>
-                                <input type="radio" name="printing_color_option" id="printing_color_option_black"
-                                  value="1" class="peer hidden" checked />
-                                <label for="printing_color_option_black"
-                                  class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Black
-                                  & White</label>
-                              </div>
-                              <div>
-                                <input type="radio" name="printing_color_option" id="printing_color_option_color"
-                                  value="2" class="peer hidden" />
-                                <label for="printing_color_option_color"
-                                  class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Color</label>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr> <!-- Copies -->
-                        <td>
-                          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt class="text-sm font-medium leading-6 text-gray-900">Copies</dt>
-                          </div>
-                        </td>
-                        <td>
-                          <input type="text"
-                            class="py-2 px-3 block w-16 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-200 dark:border-gray-700 dark:text-black-400 dark:focus:ring-gray-600"
-                            placeholder="0">
-                        </td>
-                      </tr>
-                      <tr> <!-- Potrait -->
-                        <td>
-                          <!-- potrait -->
-                          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt class="text-sm font-medium leading-6 text-gray-900">Portrait Option</dt>
-                        </td>
-                        <td>
-                          <main class="grid w-full place-items-center">
-                            <div class="grid w-60 grid-cols-2 gap-2 rounded-xl bg-gray-200 p-2">
-                              <div>
-                                <input type="radio" name="portrait_option" id="portrait_option_portrait"
-                                  value="1" class="peer hidden" checked />
-                                <label for="portrait_option_portrait"
-                                  class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Portrait</label>
-                              </div>
-
-                              <div>
-                                <input type="radio" name="portrait_option" id="portrait_option_landscape"
-                                  value="2" class="peer hidden" />
-                                <label for="portrait_option_landscape"
-                                  class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Landscape</label>
+      <!-- Content Right Side -->
+      <div class="max-w-2xl sm:px-6 lg:px-8 ">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        </div>
+        <div class="bg-white border rounded shadow p-4">
+          <div class="p-2">
+            <!-- Body content goes here -->
+            @if (Session::has('message'))
+              <div class="bg-green-500 text-white px-4 py-2 rounded">
+                <!-- Alert content goes here -->
+                {{ Session::get('message') }}
+              </div>
+            @endif
+            <div class="flex flex-col">
+              <div class="overflow-x-auto sm:-mx-6 lg:-mx-8 w-full">
+                <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                  <div class="overflow-hidden">
+                    <table class="min-w-full text-left text-sm font-light">
+                      <thead class="border-b font-medium dark:border-neutral-500">
+                        <tr>
+                          <th scope="col" class="px-6 py-4">Set Preference</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr> <!-- Color -->
+                          <td>
+                            <!-- Printing Color -->
+                            <div class="px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-0">
+                              <dt class="text-xs font-medium leading-6 text-gray-900">Printing Color</dt>
+                          </td>
+                          <td>
+                            <!-- radio button -->
+                            <div class = "grid w-full place-items-center">
+                              <div class="grid w-52 grid-cols-2 gap-2 rounded-xl bg-gray-50 p-2">
+                                <div>
+                                  <input type="radio" name="printing_color_option" id="printing_color_option_black"
+                                    value="1" class="peer hidden" checked />
+                                  <label for="printing_color_option_black"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Black
+                                    & White</label>
+                                </div>
+                                <div>
+                                  <input type="radio" name="printing_color_option" id="printing_color_option_color"
+                                    value="2" class="peer hidden" />
+                                  <label for="printing_color_option_color"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Color</label>
+                                </div>
                               </div>
                             </div>
-                          </main>
-                        </td>
-                      </tr>
-                      <tr> <!-- Sheet -->
-                        <td>
-                          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt class="text-sm font-medium leading-6 text-gray-900">Page Per Sheet</dt>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="grid w-60 grid-cols-4 gap-2 rounded-xl bg-gray-200 p-2">
-                            <div>
-                              <input type="radio" name="page_sheet_option" id="page_option_1" value="1"
-                                class="peer hidden" checked />
-                              <label for="page_option_1"
-                                class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">1</label>
+                          </td>
+                        </tr>
+                        <tr> <!-- Copies -->
+                          <td>
+                            <div class="px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-0">
+                              <dt class="text-xs font-medium leading-6 text-gray-900">Copies</dt>
                             </div>
-                            <div>
-                              <input type="radio" name="page_sheet_option" id="page_option_2" value="2"
-                                class="peer hidden" />
-                              <label for="page_option_2"
-                                class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">2</label>
+                          </td>
+                          <td>
+                            <div class="sm:px-4">
+                              <input type="text"
+                                class="py-2 px-3 block w-52 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-50 dark:border-gray-100 dark:text-black-400 dark:focus:ring-gray-600"
+                                placeholder="0">
                             </div>
-                            <div>
-                              <input type="radio" name="page_sheet_option" id="page_option_3" value="3"
-                                class="peer hidden" />
-                              <label for="page_option_3"
-                                class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">3</label>
+                          </td>
+                        </tr>
+                        <tr> <!-- Potrait -->
+                          <td>
+                            <!-- potrait -->
+                            <div class="px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-0">
+                              <dt class="text-xs font-medium leading-6 text-gray-900">Portrait Option</dt>
+                          </td>
+                          <td>
+                            <main class="grid w-full place-items-center">
+                              <div class="grid w-52 grid-cols-2 gap-2 rounded-xl bg-gray-50 p-2">
+                                <div>
+                                  <input type="radio" name="portrait_option" id="portrait_option_portrait"
+                                    value="1" class="peer hidden" checked />
+                                  <label for="portrait_option_portrait"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Portrait</label>
+                                </div>
+
+                                <div>
+                                  <input type="radio" name="portrait_option" id="portrait_option_landscape"
+                                    value="2" class="peer hidden" />
+                                  <label for="portrait_option_landscape"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Landscape</label>
+                                </div>
+                              </div>
+                            </main>
+                          </td>
+                        </tr>
+                        <tr> <!-- Sheet -->
+                          <td>
+                            <div class="px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-0">
+                              <dt class="text-xs font-medium leading-6 text-gray-900">Page Per Sheet</dt>
                             </div>
-                            <div>
-                              <input type="radio" name="page_sheet_option" id="page_option_4" value="4"
-                                class="peer hidden" />
-                              <label for="page_option_4"
-                                class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">4</label>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr> <!-- Range -->
-                        <td>
-                          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt class="text-sm font-medium leading-6 text-gray-900">Page Range</dt>
-                          </div>
-                        </td>
-                        <td>
-                          <input type="text"
-                            class="py-2 px-3 block w-28 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-200 dark:border-gray-700 dark:text-black-400 dark:focus:ring-gray-600"
-                            placeholder="1-5, 8, 11-13">
-                        </td>
-                      </tr>
-                      <tr> <!-- Sided -->
-                        <td>
-                          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt class="text-sm font-medium leading-6 text-gray-900">Sided Options</dt>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="grid w-60 grid-cols-3 gap-2 rounded-xl bg-gray-200 p-2">
-                            <div>
-                              <input type="radio" name="sided_option" id="sided_option_1" value="1"
-                                class="peer hidden" checked />
-                              <label for="sided_option_1"
-                                class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Single</label>
+                          </td>
+                          <td>
+                            <div class="sm:px-4">
+                              <div class="grid w-52 grid-cols-4 gap-2 rounded-xl bg-gray-50 p-1">
+                                <div>
+                                  <input type="radio" name="page_sheet_option" id="page_option_1" value="1"
+                                    class="peer hidden" checked />
+                                  <label for="page_option_1"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">1</label>
+                                </div>
+                                <div>
+                                  <input type="radio" name="page_sheet_option" id="page_option_2" value="2"
+                                    class="peer hidden" />
+                                  <label for="page_option_2"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">2</label>
+                                </div>
+                                <div>
+                                  <input type="radio" name="page_sheet_option" id="page_option_3" value="3"
+                                    class="peer hidden" />
+                                  <label for="page_option_3"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">3</label>
+                                </div>
+                                <div>
+                                  <input type="radio" name="page_sheet_option" id="page_option_4" value="4"
+                                    class="peer hidden" />
+                                  <label for="page_option_4"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">4</label>
+                                </div>
+                              </div>
                             </div>
 
-                            <div>
-                              <input type="radio" name="sided_option" id="sided_option_2" value="2"
-                                class="peer hidden" />
-                              <label for="sided_option_2"
-                                class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Double
-                                (short)</label>
+                          </td>
+                        </tr>
+                        <tr> <!-- Range -->
+                          <td>
+                            <div class="px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-0">
+                              <dt class="text-xs font-medium leading-6 text-gray-900">Page Range</dt>
                             </div>
-
-                            <div>
-                              <input type="radio" name="sided_option" id="sided_option_3" value="3"
-                                class="peer hidden" />
-                              <label for="sided_option_3"
-                                class="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Double
-                                (long)</label>
+                          </td>
+                          <td>
+                            <div class="sm:px-4">
+                              <input type="text"
+                                class="py-2 px-3 block w-52 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-50 dark:border-gray-100 dark:text-black-400 dark:focus:ring-gray-600"
+                                placeholder="1-5, 8, 11-13">
                             </div>
-
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                          </td>
+                        </tr>
+                        <tr> <!-- Sided -->
+                          <td>
+                            <div class="px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-0">
+                              <dt class="text-xs font-medium leading-6 text-gray-900">Sided Options</dt>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="sm:px-4">
+                              <div class="grid w-52 grid-cols-3 gap-2 rounded-xl bg-gray-50 p-2">
+                                <div>
+                                  <input type="radio" name="sided_option" id="sided_option_1" value="1"
+                                    class="peer hidden" checked />
+                                  <label for="sided_option_1"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Single</label>
+                                </div>
+                                <div>
+                                  <input type="radio" name="sided_option" id="sided_option_2" value="2"
+                                    class="peer hidden" />
+                                  <label for="sided_option_2"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Double
+                                    (short)</label>
+                                </div>
+                                <div>
+                                  <input type="radio" name="sided_option" id="sided_option_3" value="3"
+                                    class="peer hidden" />
+                                  <label for="sided_option_3"
+                                    class="block text-xs cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">Double
+                                    (long)</label>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -293,6 +301,7 @@
       </div>
     </div>
   </div>
+
 
 
   <div class="flex justify-center px-6 py-4">
