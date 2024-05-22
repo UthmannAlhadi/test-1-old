@@ -280,4 +280,6 @@ class TrainingController extends Controller
         return redirect()->route('user.training-form')->with('message', 'All uploaded files and data have been deleted.');
     }
 
+
+
 }
