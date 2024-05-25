@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/training-list', [\App\Http\Controllers\TrainingController::class, 'getTrainingList'])->name('user.training-list');
     Route::post('/user/add-training', [\App\Http\Controllers\TrainingController::class, 'postAddTraining'])->name('user.add-training');
     Route::post('/user/delete-training', [\App\Http\Controllers\TrainingController::class, 'DeleteTraining'])->name('user.delete-training');
+    Route::post('/user/update-document-display', [\App\Http\Controllers\TrainingController::class, 'updateDocumentDisplay'])->name('user.update-document-display');
 
 });
 

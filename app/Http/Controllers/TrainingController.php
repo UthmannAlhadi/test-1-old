@@ -280,6 +280,36 @@ class TrainingController extends Controller
         return redirect()->route('user.training-form')->with('message', 'All uploaded files and data have been deleted.');
     }
 
+    public function updateDocumentDisplay(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'printing_color_option' => 'required|in:1,2',
+            // Add other validations if needed
+        ]);
+
+        $printingColorOption = $request->input('printing_color_option');
+        $trainings = Training::all();
+
+        foreach ($trainings as $training) {
+            $imagePath = public_path('images/trainings/' . $training->photo);
+            if (File::exists($imagePath)) {
+                if ($printingColorOption == '1') {
+                    // Convert the image to black and white
+                    $image = Image::make($imagePath)->greyscale();
+                    $image->save($imagePath);
+                } else {
+                    // For simplicity, assume color images are already uploaded as color
+                    // Additional logic can be added here if needed
+                }
+            }
+        }
+
+        // Flash a message to the session
+        session()->flash('message', 'Preferences applied successfully.');
+
+        return redirect()->route('user.training-list');
+    }
 
 
 }
